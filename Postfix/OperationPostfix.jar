@@ -1,0 +1,15 @@
+import java.util.ArrayList;
+
+public class OperationPostfix (string Ekspresi)
+{
+	private static GetOperation(int i)
+	{
+		string.Ekspression
+		switch(i)
+		{
+			case 0:
+			return GetOperation(int i);
+			case 1:
+			return Get
+		}
+	}
