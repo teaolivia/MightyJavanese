@@ -10,7 +10,7 @@ public class PrefixTest {
         Scanner kb = new Scanner (System.in);
         String input;
         do {
-            System.out.print ("Enter a postfix expression (or Q to quit): ");
+            System.out.print ("Enter a prefix expression (or Q to quit): ");
             input = kb.nextLine();
             if (input.equalsIgnoreCase("q"))
                 System.out.println ("The real answer is 42!");
