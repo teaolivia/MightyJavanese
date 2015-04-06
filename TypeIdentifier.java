@@ -5,8 +5,8 @@ public class TypeIdentifier {
 	public static String REL_OPERATOR = "(.*\\<.*)|(.*\\<=.*)|(.*\\>.*)|(.*\\>=.*)";
 	public static String LOG_OPERATOR = "(.*AND.*)|(.*OR.*)|(.*NOT.*)";
 
-	public static String OPERATOR = "\\+|\\-|\\*|\\/|\\<|\\>|MOD|DIV";
-	public static String NUMBER = "[0-9]*";
+	public static String OPERATOR = "\\+|\\-|\\*|\\/|\\<|\\>|MOD|DIV|AND|OR|\\>=|\\<=";
+	public static String NUMBER = "-?[0-9]+";
 
 
 	public static int whatOperator(String s) {
@@ -22,7 +22,7 @@ public class TypeIdentifier {
 	public static int whatAffix(String s) {
 		if (s.matches("\\(.*")) { // infix
 			return 1;
-		} else if (s.matches("[\\+|\\-|\\*|\\/|\\<|\\>|M|D].*")) { // prefix
+		} else if (s.matches("[\\+|\\-|\\*|\\/|\\<|\\>|MOD|DIV|AND|OR|NOT].*")) { // prefix
 			if (s.matches("\\-[0-9].*")) {
 				return 3;
 			} else {

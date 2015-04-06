@@ -1,39 +1,45 @@
 import java.util.Stack;
-import java.lang.Character;
-import java.lang.Integer;
-import java.lang.Boolean;
+import java.util.regex.*;
 
-class Infix {
-	
-	private Stack<Character> original;
+public class Infix {
+	private Stack<String> original;
+	public static final String CHARACTER = "\\+|\\-|\\*|\\/";  
+    public static final String UNSIGNED_DOUBLE = 
+        "((\\d+\\.?\\d*)|(\\.\\d+))([Ee][-+]?\\d+)?.*?";
 
 	public Infix() {}
 	
-	public void setStack(Stack<Character> stack) {
-		// original = (Stack<Character>)stack.clone();
-		original = stack;
+	public void setExpression(String expression) {
+		String expArray [] = expression.split("\\s");
+		for(int i = (expArray.length - 1); i >= 0; i--) {
+			if (i != 0) {
+				original.push(expArray[i]);
+				original.push(" ");
+			} else {
+				original.push(expArray[i]);
+			}
+        }
 	}
 
-	public Stack<Character> getStack() {
-		return original;
-	}
-
-	public int parsen() {
-		Stack<Character> stackop = new Stack<Character>();  
-		Stack<Integer> angka = new Stack<Integer>();
-		int result = 0;
-		stackop.push('l');
-		angka.push(-999);
+	public double evalInfix() {
+		Stack<String> stackop = new Stack<String>();  
+		Stack<Double> angka = new Stack<Double>();
+		double result = 0.0;
+		stackop.push("l");
+		String opeek = "";
+		angka.push(-99999999.0);
 
 		while (!stackop.empty() && !angka.empty()) {
-			// IMPORTANT -------- IF ORDER MATTERS
+			if (!original.empty()) { opeek = original.peek(); }
+			String stackopeek = stackop.peek();
+			double angkapeek = angka.peek();
+			// System.out.println("/"+opeek+"/");
 
-			// if stack original habis
 			if (original.empty()) {
-				if (stackop.peek() != 'l' && angka.peek() != -555) { // masih ada hitungan
-					int opa2 = angka.pop();
-					int opa1 = angka.pop();
-					char opr = stackop.pop();
+				if (!stackopeek.equals("l") && angkapeek != -99999999.0) { // masih ada hitungan
+					double opa2 = angka.pop();
+					double opa1 = angka.pop();
+					String opr = stackop.pop();
 					angka.push(calculate(opa1,opa2,opr));
 
 					result = angka.pop();
@@ -44,92 +50,58 @@ class Infix {
 					stackop.pop();
 				}
 				else {
-					return -999;
+					return -888.0;
 				}
 			}
 
 			// if whitespace
-			else if (original.peek() == ' ') {
+			else if (opeek.equals(" ")) {
 				original.pop();
 			}
 
-			// if char == angka
-			else if (original.peek() != '+' && original.peek() != '-' && original.peek() != '/' && original.peek() != '*' && original.peek() != '(' && original.peek() != ')') {
-				char c = original.pop();
-				String str = Character.toString(c);
-				while (original.peek() != ' ') {
-					char d = original.pop();
-					String strx = Character.toString(d);
-					str = str + strx;
-				}
-
-				int n = Integer.parseInt(str);
-				angka.push(n);
-
+			// if string == angka
+			else if (TypeIdentifier.isNumber(opeek) || opeek.matches(UNSIGNED_DOUBLE)) {
+				String str = original.pop();;
+				angka.push(new Double(str));
 			} 
 
-			else if (original.peek() == '+' || original.peek() == '-' || original.peek() == '/' || original.peek() == '*' || original.peek() == '(' || original.peek() == ')') {
-					
-					Stack<Character> temp = (Stack<Character>)original.clone();
+			// if string == operator
+			else if (TypeIdentifier.isOperator(opeek) || opeek.equals("(") || opeek.equals(")")) {
 
-					if (original.peek() == '(') {
-						stackop.push(original.pop());
-					}
-						
-					else if (original.peek() == ')') {
+				Stack<String> temp = (Stack<String>)original.clone();
+				if (opeek.equals("(")) {
+					stackop.push(original.pop());
+				}
+
+				else if (opeek.equals(")")) {
 						original.pop();
-						int opa2 = angka.pop();
-						int opa1 = angka.pop();
-						char opr = stackop.pop();
+						double opa2 = angka.pop();
+						double opa1 = angka.pop();
+						String opr = stackop.pop();
 						angka.push(calculate(opa1,opa2,opr));
-						if (stackop.peek() == '(') {
+						stackopeek = stackop.peek();
+						if (stackopeek.equals("(")) {
 							stackop.pop();
-						}
 					}
+				}
 
-					else if (original.peek() == '-') {
-						temp.pop();
-						// if predecessor - is angka -- berarti int minus
-						if (temp.peek() != '+' && temp.peek() != '-' && temp.peek() != '/' && temp.peek() != '*' && temp.peek() != '(' && temp.peek() != ')' && temp.peek() != ' ') {
-							char c = original.pop();
-							String str = Character.toString(c);
+				else {
+					System.out.println("mewmew");
+					stackop.push(original.pop());
+				}
+			} 
 
-							while (original.peek() != ' ') {
-								char d = original.pop();
-								String strx = Character.toString(d);
-								str = str + strx;
-							}
+			else { return -999.0; }
 
-							int n = Integer.parseInt(str);
-							angka.push(n);
-						} else {
-							stackop.push(original.pop());
-						}
-					}
-
-					else {
-						stackop.push(original.pop());
-					}
-			}
-
-			else {
-				return -999;
-			}
-		}
+		} // while loop
 		return result;
 	} // parsen
 
-	public int calculate(int opa1, int opa2, char opr) {
-		if (opr == '+') { return opa1 + opa2; }
-		else if (opr == '-') { return opa1 - opa2; }
-		else if (opr == '*') { return opa1 * opa2; }
+	public double calculate(double opa1, double opa2, String opr) {
+		if (opr.equals("+")) { return opa1 + opa2; }
+		else if (opr.equals("-")) { return opa1 - opa2; }
+		else if (opr.equals("*")) { return opa1 * opa2; }
 		else { return opa1 / opa2; }
 	}
 
-	public void test() {
-		int a = original.size();
-		for (int i =0; i < a; i++) {
-			System.out.println(original.pop());
-		}
-	}
 }

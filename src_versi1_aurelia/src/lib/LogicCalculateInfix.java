@@ -12,16 +12,17 @@ public class LogicCalculateInfix {
 		
 	}
 	
-	public void setStack(Stack<String> stack) {
-		original = stack;
+	public void setExpression(String expression) {
+		String expArray [] = expression.split("\\s");
+		for(int i = (expArray.length - 1); i >= 0; i--) {
+			if (i != 0) {
+				original.push(expArray[i]);
+				original.push(" ");
+			} else {
+				original.push(expArray[i]);
+			}
+        }
 	}
-
-	
-	public Stack<String> getStack() {
-		// TODO Auto-generated method stub
-		return original;
-	}
-
 	
 	public String parsen() {
 		// TODO Auto-generated method stub
@@ -132,15 +133,5 @@ public class LogicCalculateInfix {
                 System.out.println("What is this? " + op);
         }
 		return result;
-	}
-
-
-	
-	public void test() {
-		// TODO Auto-generated method stub
-		int a = original.size();
-		for (int i =0; i < a; i++) {
-			System.out.println(original.pop());
-	}
 	}
 }

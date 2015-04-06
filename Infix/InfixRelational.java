@@ -1,11 +1,9 @@
 import java.util.Stack;
-import java.lang.String;
-import java.lang.Integer;
-import java.lang.Boolean;
 
 class InfixRelational {
 	
 	private Stack<String> original;
+	public static final String UNSIGNED_DOUBLE = "((\\d+\\.?\\d*)|(\\.\\d+))([Ee][-+]?\\d+)?.*?";
 	
 	public InfixRelational() {}
 
@@ -17,13 +15,13 @@ class InfixRelational {
 		return original;
 	}
 
-	public int evalRelational() {
+	public double evalRelational() {
 		Stack<String> stackop = new Stack<String>();  
-		Stack<Integer> angka = new Stack<Integer>();
+		Stack<Double> angka = new Stack<Double>();
 		String peek = "";
-		int result = 0;
+		double result = 0.0;
 		stackop.push("l");
-		angka.push(-999);
+		angka.push(-999.0);
 
 		while (!stackop.empty() && !angka.empty()) {
 			// IMPORTANT -------- IF ORDER MATTERS
@@ -34,9 +32,9 @@ class InfixRelational {
 			if (original.empty()) {
 				String peekOp = stackop.peek();
 
-				if (!peekOp.equals("l") && angka.peek() != -999) { // masih ada hitungan
-					int opa2 = angka.pop();
-					int opa1 = angka.pop();
+				if (!peekOp.equals("l") && angka.peek() != -999.0) { // masih ada hitungan
+					double opa2 = angka.pop();
+					double opa1 = angka.pop();
 					String opr = stackop.pop();
 					angka.push(calculate(opa1,opa2,opr));
 
@@ -48,7 +46,7 @@ class InfixRelational {
 					stackop.pop();
 				}
 				else {
-					return -999;
+					return -999.0;
 				}
 			}
 
@@ -58,10 +56,9 @@ class InfixRelational {
 			}
 
 			// if char == angka
-			else if (!peek.equals("<") && !peek.equals("<=") && !peek.equals(">") && !peek.equals(">=") && !peek.equals("(") && !peek.equals(")")) {
+			else if (TypeIdentifier.isNumber(peek) || peek.matches(UNSIGNED_DOUBLE)) {
 				String str = original.pop();
-				int n = Integer.parseInt(str);
-				angka.push(n);
+				angka.push(new Double(str));
 
 			} 
 
@@ -71,8 +68,8 @@ class InfixRelational {
 				}
 				else if (peek.equals(")")) {
 					original.pop();
-					int opa2 = angka.pop();
-					int opa1 = angka.pop();
+					double opa2 = angka.pop();
+					double opa1 = angka.pop();
 					String opr = stackop.pop();
 					angka.push(calculate(opa1,opa2,opr));
 
@@ -94,32 +91,32 @@ class InfixRelational {
 		return result;
 	}
 
-	public int calculate(int opa1, int opa2, String opr) {
-		Boolean tempResult;
+	public double calculate(double opa1, double opa2, String opr) {
+		boolean tempResult;
 		switch(opr) {
 			case ">":
 				tempResult = opa1>opa2;
-				if (tempResult == true) { return 1; }
-				else { return 0; }
+				if (tempResult == true) { return 1.0; }
+				else { return 0.0; }
 
 			case "<":
 				tempResult = opa1<opa2;
-				if (tempResult == true) { return 1; }
-				else { return 0; }
+				if (tempResult == true) { return 1.0; }
+				else { return 0.0; }
 
 			case "<=":
 				tempResult = opa1<=opa2;
-				if (tempResult == true) { return 1; }
-				else { return 0; }
+				if (tempResult == true) { return 1.0; }
+				else { return 0.0; }
 
 			case ">=":
 				tempResult = opa1>=opa2;
-				if (tempResult == true) { return 1; }
-				else { return 0; }
+				if (tempResult == true) { return 1.0; }
+				else { return 0.0; }
 
 			default:
 				System.out.println("wrong syntax");
-				return 0;
+				return 0.0;
 		}
 	}
 }
