@@ -14,7 +14,7 @@ public class LogicCalculate {
 	private String expression; 
 	private static final String operators = "\\AND|\\OR |\\XOR";
 	private static final String operands= "\\true|\\ false";
-	private Stack<String> original;
+	private Stack<String> original = new Stack<String>();
 	public LogicCalculate(){}
 	
 	public boolean isInfix(){
@@ -27,14 +27,17 @@ public class LogicCalculate {
 		return true;
 	}
 	
-	public void setStack(Stack<String> stack) {
-		original = stack;
-	}
-	
-	public Stack<String> getStack() {
-		// TODO Auto-generated method stub
-		return original;
-	}
+    public void setExpression(String expression) {
+        String expArray [] = expression.split("\\s");
+        for(int i = (expArray.length - 1); i >= 0; i--) {
+            if (i != 0) {
+                original.push(expArray[i]);
+                original.push(" ");
+            } else {
+                original.push(expArray[i]);
+            }
+        }
+    }
 	
 	public void evalPrefix () {
         if(expression.length() == 0)

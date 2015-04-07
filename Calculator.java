@@ -51,9 +51,10 @@ public class Calculator {
 					  break;
 					case 2: //prefix
 						System.out.println("relational Prefix");
-						// -----------------------
-						// TODO RELATIONAL PREFIX
-						// -----------------------
+						PrefixRelational pr = new PrefixRelational();
+						pr.setExpression(input);
+						pr.evalPrefix();
+						System.out.println("Your expression evaluates to: " + pr.getResult());
 					  break;
 					case 3: //postfix
 						System.out.println("relational Postfix");
@@ -77,9 +78,10 @@ public class Calculator {
 					  break;
 					case 2: //prefix
 						System.out.println("logic Prefix");
-						// -----------------------
-						// TODO LOGIC PREFIX
-						// -----------------------
+						LogicCalculate lg = new LogicCalculate();
+						lg.setExpression(input);
+						lg.evalPrefix();
+						System.out.println("Your expression evaluates to: " + lg.getResult());
 					  break;
 					case 3: //postfix
 						System.out.println("logic Postfix");
