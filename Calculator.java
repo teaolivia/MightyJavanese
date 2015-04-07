@@ -1,9 +1,11 @@
 import java.util.*;
+import java.text.DecimalFormat;
 
 public class Calculator {
 	public static void main (String [] args) {
 		String input;
 		Scanner sc = new Scanner(System.in);
+		DecimalFormat formatter = new DecimalFormat("#0.00");
 		
 		// CommandProcessing cmd = new CommandProcessing();
 		do {
@@ -18,7 +20,7 @@ public class Calculator {
 						System.out.println("Arithmetix Infix");
 						Infix inx = new Infix();
 						inx.setExpression(input);
-						System.out.println ("Your expression evaluates to: " + inx.evalInfix());
+						System.out.println ("Your expression evaluates to: " + formatter.format(inx.evalInfix()));
 					  break;
 					case 2: //prefix
 						System.out.println("Arithmetix Prefix");

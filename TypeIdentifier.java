@@ -1,7 +1,7 @@
 import java.util.regex.*;
 
 public class TypeIdentifier {
-	public static String ART_OPERATOR = "(.*\\-.*)|(.*\\+.*)|(.*\\*.*)|(.*\\/.*)";
+	public static String ART_OPERATOR = "(.*\\-.*)|(.*\\+.*)|(.*\\*.*)|(.*\\/.*)|(.*MOD.*)";
 	public static String REL_OPERATOR = "(.*\\<.*)|(.*\\<=.*)|(.*\\>.*)|(.*\\>=.*)";
 	public static String LOG_OPERATOR = "(.*AND.*)|(.*OR.*)|(.*NOT.*)";
 

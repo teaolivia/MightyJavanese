@@ -2,17 +2,21 @@ import java.util.Stack;
 
 class InfixRelational {
 	
-	private Stack<String> original;
+	private Stack<String> original = new Stack<String>();
 	public static final String UNSIGNED_DOUBLE = "((\\d+\\.?\\d*)|(\\.\\d+))([Ee][-+]?\\d+)?.*?";
 	
 	public InfixRelational() {}
 
-	public void setStack(Stack<String> stack) {
-		original = stack;
-	}
-
-	public Stack<String> getStack() {
-		return original;
+	public void setExpression(String expression) {
+		String expArray [] = expression.split("\\s");
+		for(int i = (expArray.length - 1); i >= 0; i--) {
+			if (i != 0) {
+				original.push(expArray[i]);
+				original.push(" ");
+			} else {
+				original.push(expArray[i]);
+			}
+        }
 	}
 
 	public double evalRelational() {
